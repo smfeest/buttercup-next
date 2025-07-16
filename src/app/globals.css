@@ -1,1 +1,28 @@
+:root {
+  --color-blue: #2c6877;
+  --color-orange: #e4682d;
 
+  --padding: 1rem;
+
+  --min-width: 16rem;
+  --max-width: 75rem;
+}
+
+body {
+  margin: 0 var(--padding);
+  min-width: var(--min-width);
+}
+
+h1 {
+  color: var(--color-orange);
+  font-weight: bold;
+}
+
+a {
+  color: var(--color-blue);
+}
+
+.pageContent {
+  margin: var(--padding) auto;
+  max-width: var(--max-width);
+}

@@ -1,3 +1,8 @@
 export default function Home() {
-  return <div>Welcome to Buttercup</div>;
+  return (
+    <>
+      <h1>Home</h1>
+      <p>Welcome to Buttercup</p>
+    </>
+  );
 }
