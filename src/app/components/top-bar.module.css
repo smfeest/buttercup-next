@@ -1,0 +1,32 @@
+.topBar {
+  --top-bar-height: 3rem;
+  --top-bar-focus-border-width: 2px;
+
+  background-color: var(--color-blue);
+  margin: 0 calc(var(--padding) * -1);
+}
+
+.contentContainer {
+  display: grid;
+  margin: 0 auto;
+  grid-template-columns: var(--top-bar-height) auto var(--top-bar-height);
+  max-width: calc(var(--max-width) + (2 * var(--padding)));
+}
+
+.logotype {
+  fill: var(--color-white);
+  height: 1.875em;
+  margin-top: 0.1875em;
+  width: 7.125em;
+}
+
+.homeButton {
+  align-items: center;
+  display: flex;
+  grid-area: 1 / 2;
+  justify-self: center;
+  min-height: calc(
+    var(--top-bar-height) - (2 * var(--top-bar-focus-border-width))
+  );
+  padding: 0 calc(var(--padding) - var(--top-bar-focus-border-width));
+}

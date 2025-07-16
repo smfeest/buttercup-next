@@ -1,1 +1,13 @@
+:root {
+  --color-blue: #2c6877;
 
+  --color-white: #fff;
+
+  --padding: 1rem;
+
+  --max-width: 75rem;
+}
+
+body {
+  margin: 0 var(--padding);
+}
