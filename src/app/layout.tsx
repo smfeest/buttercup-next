@@ -24,7 +24,9 @@ export default function RootLayout({
         <link rel="icon" type="image/png" href={icon128.src} sizes="128x128" />
         <link rel="icon" type="image/png" href={icon512.src} sizes="512x512" />
       </head>
-      <body>{children}</body>
+      <body>
+        <div className="pageContent">{children}</div>
+      </body>
     </html>
   );
 }
