@@ -16,5 +16,7 @@ jobs:
           cache: npm
       - name: Restore dependencies
         run: npm ci
+      - name: Check formatting
+        run: npx prettier -c .
       - name: Build app
         run: npx next build
