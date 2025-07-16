@@ -1,0 +1,20 @@
+name: CI
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build:
+    name: Build and test
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Restore dependencies
+        run: npm ci
+      - name: Build app
+        run: npx next build
