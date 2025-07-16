@@ -2,6 +2,7 @@ import { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Lora, Roboto } from "next/font/google";
+import TopBar from "../components/top-bar";
 import "./globals.css";
 import icon128 from "./icon-128.png";
 import icon16 from "./icon-16.png";
@@ -55,6 +56,7 @@ export default async function RootLayout({
       </head>
       <body className={`${lora.variable} ${roboto.variable}`}>
         <NextIntlClientProvider>
+          <TopBar />
           <div className="pageContent">{children}</div>
         </NextIntlClientProvider>
       </body>
