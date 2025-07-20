@@ -1,4 +1,5 @@
 import { Viewport } from "next";
+import { Lora, Roboto } from "next/font/google";
 import "./globals.css";
 import icon128 from "./icon-128.png";
 import icon16 from "./icon-16.png";
@@ -9,6 +10,19 @@ import icon96 from "./icon-96.png";
 export const viewport: Viewport = {
   themeColor: "#2c6877",
 };
+
+const lora = Lora({
+  display: "optional",
+  fallback: ["serif"],
+  preload: false,
+  variable: "--font-lora",
+});
+const roboto = Roboto({
+  display: "optional",
+  fallback: ["sans-serif"],
+  preload: false,
+  variable: "--font-roboto",
+});
 
 export default function RootLayout({
   children,
@@ -24,7 +38,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" href={icon128.src} sizes="128x128" />
         <link rel="icon" type="image/png" href={icon512.src} sizes="512x512" />
       </head>
-      <body>
+      <body className={`${lora.variable} ${roboto.variable}`}>
         <div className="pageContent">{children}</div>
       </body>
     </html>
