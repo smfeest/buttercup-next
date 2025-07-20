@@ -1,6 +1,6 @@
-import { Viewport } from "next";
+import { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Lora, Roboto } from "next/font/google";
 import "./globals.css";
 
@@ -20,6 +20,18 @@ const roboto = Roboto({
   preload: false,
   variable: "--font-roboto",
 });
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("layout");
+  const title = t("title");
+
+  return {
+    title: {
+      template: `%s - ${title}`,
+      default: title,
+    },
+  };
+}
 
 export default async function RootLayout({
   children,

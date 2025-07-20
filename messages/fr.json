@@ -1,9 +1,13 @@
 {
+  "layout": {
+    "title": "Buttercup"
+  },
   "home": {
     "title": "Accueil",
     "welcome": "Bienvenue à Buttercup"
   },
   "notFound": {
+    "title": "Page non trouvée",
     "message": "Cette page n'a pas pu être trouvée."
   }
 }
