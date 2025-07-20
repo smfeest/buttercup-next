@@ -1,4 +1,6 @@
 import { Viewport } from "next";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale } from "next-intl/server";
 import { Lora, Roboto } from "next/font/google";
 import "./globals.css";
 
@@ -19,15 +21,18 @@ const roboto = Roboto({
   variable: "--font-roboto",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body className={`${lora.variable} ${roboto.variable}`}>
-        <div className="pageContent">{children}</div>
+        <NextIntlClientProvider>
+          <div className="pageContent">{children}</div>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

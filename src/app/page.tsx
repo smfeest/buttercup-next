@@ -1,8 +1,11 @@
+import { useTranslations } from "next-intl";
+
 export default function Home() {
+  const t = useTranslations("home");
   return (
     <>
-      <h1>Home</h1>
-      <p>Welcome to Buttercup</p>
+      <h1>{t("title")}</h1>
+      <p>{t("welcome")}</p>
     </>
   );
 }

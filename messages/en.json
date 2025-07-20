@@ -1,0 +1,9 @@
+{
+  "home": {
+    "title": "Home",
+    "welcome": "Welcome to Buttercup"
+  },
+  "notFound": {
+    "message": "This page could not be found."
+  }
+}
