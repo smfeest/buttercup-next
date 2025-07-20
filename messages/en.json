@@ -1,4 +1,7 @@
 {
+  "layout": {
+    "title": "Buttercup"
+  },
   "home": {
     "title": "Home",
     "welcome": "Welcome to Buttercup"
