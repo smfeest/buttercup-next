@@ -9,12 +9,14 @@
 }
 
 body {
+  font-family: var(--font-roboto);
   margin: 0 var(--padding);
   min-width: var(--min-width);
 }
 
 h1 {
   color: var(--color-orange);
+  font-family: var(--font-lora);
   font-weight: bold;
 }
 
