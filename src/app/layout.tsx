@@ -1,9 +1,14 @@
+import { Viewport } from "next";
 import "./globals.css";
 import icon128 from "./icon-128.png";
 import icon16 from "./icon-16.png";
 import icon32 from "./icon-32.png";
 import icon512 from "./icon-512.png";
 import icon96 from "./icon-96.png";
+
+export const viewport: Viewport = {
+  themeColor: "#2c6877",
+};
 
 export default function RootLayout({
   children,
