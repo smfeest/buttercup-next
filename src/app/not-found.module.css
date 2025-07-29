@@ -1,0 +1,18 @@
+.container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: var(--padding);
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.statusCode {
+  border-right: 1px solid var(--color-grey);
+  margin-right: var(--padding);
+  padding-right: var(--padding);
+}
