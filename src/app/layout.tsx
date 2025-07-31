@@ -2,6 +2,7 @@ import { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Lora, Roboto } from "next/font/google";
+import TopBar from "./components/top-bar";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -43,6 +44,7 @@ export default async function RootLayout({
     <html lang={locale}>
       <body className={`${lora.variable} ${roboto.variable}`}>
         <NextIntlClientProvider>
+          <TopBar />
           <div className="pageContent">{children}</div>
         </NextIntlClientProvider>
       </body>
