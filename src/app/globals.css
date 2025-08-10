@@ -5,6 +5,9 @@
 
   --color-white: #fff;
   --color-grey: #ccc;
+  --color-very-dark-grey: #333;
+
+  --focus-color: var(--color-blue);
 
   --padding: 1rem;
 
