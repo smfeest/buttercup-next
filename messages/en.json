@@ -14,5 +14,11 @@
   "notFound": {
     "title": "Page not found",
     "message": "This page could not be found."
+  },
+  "signIn": {
+    "title": "Sign in",
+    "emailFieldLabel": "Email",
+    "passwordFieldLabel": "Password",
+    "signInButtonLabel": "Sign in"
   }
 }
