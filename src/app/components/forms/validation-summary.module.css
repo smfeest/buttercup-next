@@ -1,0 +1,8 @@
+.validationSummary {
+  background-color: var(--color-red);
+  color: var(--color-white);
+  font-weight: bold;
+  list-style-type: none;
+  margin: 0 0 var(--form-vertical-padding-large);
+  padding: var(--form-vertical-padding-small) var(--form-horizontal-padding);
+}

@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useActionState } from "react";
+import ValidationSummary from "../components/forms/validation-summary";
 import signInAction from "./action";
 
 export default function SignInForm() {
@@ -9,11 +10,7 @@ export default function SignInForm() {
   const t = useTranslations("signIn");
   return (
     <form action={action}>
-      <ul aria-live="polite">
-        {errors?.map((error) => (
-          <li key="error">{error}</li>
-        ))}
-      </ul>
+      <ValidationSummary errors={errors} />
       <label>
         {t("emailFieldLabel")}
         <input name="email" type="email" defaultValue={email} required />
