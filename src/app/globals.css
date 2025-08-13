@@ -1,6 +1,7 @@
 :root {
   --color-blue: #2c6877;
   --color-orange: #e4682d;
+  --color-red: #a00;
 
   --color-white: #fff;
   --color-grey: #ccc;
@@ -11,6 +12,10 @@
   --max-width: 75rem;
 
   --top-bar-height: 3rem;
+
+  --form-horizontal-padding: 1em;
+  --form-vertical-padding-large: 1.5em;
+  --form-vertical-padding-small: 0.5em;
 }
 
 body {
