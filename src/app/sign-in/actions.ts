@@ -1,9 +1,11 @@
 "use server";
 
+import { getClient } from "@/graphql/client";
+import { gql } from "@apollo/client";
 import { redirect } from "next/navigation";
 
 type SignInState = {
-  email?: string;
+  email?: string | undefined;
   errors?: string[];
 };
 
@@ -12,12 +14,43 @@ export async function signIn(
   formData: FormData,
 ): Promise<SignInState> {
   const email = formData.get("email")?.toString();
-  if (email?.startsWith("bad@")) {
+  const password = formData.get("password")?.toString();
+
+  const client = getClient();
+
+  const { data } = await client.mutate({
+    mutation: gql`
+      mutation ($input: AuthenticateInput!) {
+        authenticate(input: $input) {
+          isSuccess
+          user {
+            email
+          }
+          errors {
+            ... on Error {
+              message
+            }
+          }
+        }
+      }
+    `,
+
+    variables: {
+      input: {
+        email,
+        password,
+      },
+    },
+  });
+
+  if (!data?.authenticate?.isSuccess) {
     return {
       email,
-      errors: ["Incorrect credentials"],
+      errors: data.authenticate.errors.map(
+        (error: { message: string }) => error.message,
+      ),
     };
   }
 
-  redirect("/");
+  redirect(`/?user=${data.authenticate.user.email}`);
 }
