@@ -1,26 +1,26 @@
 "use server";
 
 import { getClient } from "@/api/client";
-import { gql } from "@apollo/client";
+import { graphql } from "@/api/graphql";
 import { redirect } from "next/navigation";
 
 type SignInState = {
   email?: string | undefined;
-  errors?: string[];
+  errors?: string[] | undefined | null;
 };
 
 export default async function signInAction(
   _: SignInState,
   formData: FormData,
 ): Promise<SignInState> {
-  const email = formData.get("email")?.toString();
-  const password = formData.get("password")?.toString();
+  const email = formData.get("email")?.toString() ?? "";
+  const password = formData.get("password")?.toString() ?? "";
 
   const client = getClient();
 
   const { data } = await client.mutate({
-    mutation: gql`
-      mutation ($input: AuthenticateInput!) {
+    mutation: graphql(`
+      mutation SignIn($input: AuthenticateInput!) {
         authenticate(input: $input) {
           isSuccess
           errors {
@@ -30,7 +30,7 @@ export default async function signInAction(
           }
         }
       }
-    `,
+    `),
     variables: {
       input: {
         email,
