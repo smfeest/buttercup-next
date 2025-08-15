@@ -1,5 +1,6 @@
 "use server";
 
+import { graphql } from "@/graphql";
 import { getClient } from "@/graphql/client";
 import { gql } from "@apollo/client";
 import { redirect } from "next/navigation";
@@ -9,39 +10,44 @@ type SignInState = {
   errors?: string[];
 };
 
+const authenticateMutationDocument = graphql(`
+  mutation Authenticate($input: AuthenticateInput!) {
+    authenticate(input: $input) {
+      isSuccess
+      user {
+        email
+      }
+      errors {
+        ... on Error {
+          message
+        }
+      }
+    }
+  }
+`);
+
 export async function signIn(
   _: SignInState,
   formData: FormData,
 ): Promise<SignInState> {
   const email = formData.get("email")?.toString();
-  const password = formData.get("password")?.toString();
+  // const password = formData.get("password")?.toString();
 
   const client = getClient();
 
-  const { data } = await client.mutate({
-    mutation: gql`
-      mutation ($input: AuthenticateInput!) {
-        authenticate(input: $input) {
-          isSuccess
-          user {
-            email
-          }
-          errors {
-            ... on Error {
-              message
-            }
-          }
-        }
-      }
-    `,
+  // const data = {
+  //   authenticate: { isSuccess: true, errors: [], user: { email: "foo " } },
+  // };
 
-    variables: {
-      input: {
-        email,
-        password,
-      },
-    },
-  });
+  const { data } = await client.mutate(authenticateMutationDocument, { input:  });
+
+  //   variables: {
+  //     input: {
+  //       email,
+  //       password,
+  //     },
+  //   } ,
+  // }});
 
   if (!data?.authenticate?.isSuccess) {
     return {

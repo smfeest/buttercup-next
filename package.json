@@ -7,12 +7,16 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "graphql:codegen": "graphql-codegen",
     "graphql:fetch-schema": "curl http://localhost:5000/graphql?sdl --output src/graphql/schema.graphql"
   },
   "dependencies": {
     "@apollo/client": "^3.13.9",
     "@apollo/client-integration-nextjs": "^0.12.3",
     "@formatjs/intl-localematcher": "^0.6.1",
+    "@graphql-codegen/cli": "^5.0.7",
+    "@parcel/watcher": "^2.5.1",
+    "graphql": "^16.11.0",
     "negotiator": "^1.0.0",
     "next": "15.4.1",
     "next-intl": "^4.3.4",
@@ -30,6 +34,6 @@
     "eslint": "^9",
     "eslint-config-next": "15.4.1",
     "prettier": "^3.6.2",
-    "typescript": "^5"
+    "typescript": "^5.9.2"
   }
 }
