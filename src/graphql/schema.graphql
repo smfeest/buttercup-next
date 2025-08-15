@@ -1,0 +1,477 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+interface Error {
+  message: String!
+}
+
+type AuthenticatePayload {
+  isSuccess: Boolean!
+  accessToken: String
+  user: User
+  errors: [AuthenticateError!]
+}
+
+type Comment {
+  id: Long!
+  recipe: Recipe
+  author: User
+  body: String!
+  created: DateTime!
+  modified: DateTime!
+  deleted: DateTime
+  deletedByUser: User
+  revision: Int!
+  revisions: [CommentRevision!]!
+}
+
+type CommentRevision {
+  comment: Comment
+  revision: Int!
+  created: DateTime!
+  body: String!
+}
+
+"A connection to a list of items."
+type CommentsConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [CommentsEdge!]
+  "A flattened list of the nodes."
+  nodes: [Comment!]
+}
+
+"An edge in a connection."
+type CommentsEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Comment!
+}
+
+type ConcurrencyError implements Error {
+  message: String!
+}
+
+type CreateCommentPayload {
+  comment: Comment @cost(weight: "10")
+  errors: [CreateCommentError!]
+}
+
+type CreateRecipePayload {
+  recipe: Recipe @cost(weight: "10")
+  errors: [CreateRecipeError!]
+}
+
+type DeleteCommentPayload {
+  comment: Comment @cost(weight: "10")
+  deleted: Boolean!
+}
+
+type DeleteRecipePayload {
+  recipe: Recipe @cost(weight: "10")
+  deleted: Boolean!
+}
+
+"A connection to a list of items."
+type DeletedCommentsConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [DeletedCommentsEdge!]
+  "A flattened list of the nodes."
+  nodes: [Comment!]
+}
+
+"An edge in a connection."
+type DeletedCommentsEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Comment!
+}
+
+type HardDeleteCommentPayload {
+  deleted: Boolean!
+}
+
+type HardDeleteRecipePayload {
+  deleted: Boolean!
+}
+
+type IncorrectCredentialsError implements Error {
+  message: String!
+}
+
+type Mutation {
+  authenticate(input: AuthenticateInput!): AuthenticatePayload! @cost(weight: "10")
+  createComment(input: CreateCommentInput!): CreateCommentPayload! @authorize @cost(weight: "10")
+  createRecipe(input: CreateRecipeInput!): CreateRecipePayload! @authorize @cost(weight: "10")
+  deleteComment(input: DeleteCommentInput!): DeleteCommentPayload! @authorize @cost(weight: "10")
+  deleteRecipe(input: DeleteRecipeInput!): DeleteRecipePayload! @authorize @cost(weight: "10")
+  hardDeleteComment(input: HardDeleteCommentInput!): HardDeleteCommentPayload! @authorize(policy: "AdminOnly") @cost(weight: "10")
+  hardDeleteRecipe(input: HardDeleteRecipeInput!): HardDeleteRecipePayload! @authorize(policy: "AdminOnly") @cost(weight: "10")
+  updateRecipe(input: UpdateRecipeInput!): UpdateRecipePayload! @authorize @cost(weight: "10")
+}
+
+type NotFoundError implements Error {
+  message: String!
+}
+
+"Information about pagination in a connection."
+type PageInfo {
+  "Indicates whether more edges exist following the set defined by the clients arguments."
+  hasNextPage: Boolean!
+  "Indicates whether more edges exist prior the set defined by the clients arguments."
+  hasPreviousPage: Boolean!
+  "When paginating backwards, the cursor to continue."
+  startCursor: String
+  "When paginating forwards, the cursor to continue."
+  endCursor: String
+}
+
+type Query {
+  comment(id: Long!): Comment @authorize(policy: "AuthenticatedAndAdminWhenDeleted", apply: AFTER_RESOLVER) @cost(weight: "10")
+  comments("Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String where: CommentFilterInput @cost(weight: "10") order: [CommentSortInput!] @cost(weight: "10")): CommentsConnection @authorize @authorize(policy: "AdminOnlyFilterAndSortFields") @listSize(assumedSize: 500, slicingArguments: [ "first", "last" ], slicingArgumentDefaultValue: 10, sizedFields: [ "edges", "nodes" ], requireOneSlicingArgument: false) @cost(weight: "10")
+  currentUser: User @cost(weight: "10")
+  deletedComments("Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String where: CommentFilterInput @cost(weight: "10") order: [CommentSortInput!] @cost(weight: "10")): DeletedCommentsConnection @authorize(policy: "AdminOnly") @listSize(assumedSize: 500, slicingArguments: [ "first", "last" ], slicingArgumentDefaultValue: 10, sizedFields: [ "edges", "nodes" ], requireOneSlicingArgument: false) @cost(weight: "10")
+  deletedRecipes(where: RecipeFilterInput @cost(weight: "10") order: [RecipeSortInput!] @cost(weight: "10")): [Recipe!]! @authorize(policy: "AdminOnly") @cost(weight: "10")
+  recipe(id: Long!): Recipe @authorize(policy: "AuthenticatedAndAdminWhenDeleted", apply: AFTER_RESOLVER) @cost(weight: "10")
+  recipes(where: RecipeFilterInput @cost(weight: "10") order: [RecipeSortInput!] @cost(weight: "10")): [Recipe!]! @authorize @authorize(policy: "AdminOnlyFilterAndSortFields") @cost(weight: "10")
+  user(id: Long!): User @authorize @cost(weight: "10")
+  users(where: UserFilterInput @cost(weight: "10") order: [UserSortInput!] @cost(weight: "10")): [User!]! @authorize @authorize(policy: "AdminOnlyFilterAndSortFields") @cost(weight: "10")
+}
+
+type Recipe {
+  id: Long!
+  title: String!
+  preparationMinutes: Int
+  cookingMinutes: Int
+  servings: Int
+  ingredients: String!
+  method: String!
+  suggestions: String
+  remarks: String
+  source: String
+  created: DateTime!
+  createdByUser: User
+  modified: DateTime!
+  modifiedByUser: User
+  deleted: DateTime
+  deletedByUser: User
+  revision: Int!
+  revisions: [RecipeRevision!]!
+  comments: [Comment!]! @cost(weight: "10")
+  deletedComments: [Comment!]! @authorize(policy: "AdminOnly") @cost(weight: "10")
+}
+
+type RecipeRevision {
+  recipe: Recipe
+  revision: Int!
+  created: DateTime!
+  createdByUser: User
+  title: String!
+  preparationMinutes: Int
+  cookingMinutes: Int
+  servings: Int
+  ingredients: String!
+  method: String!
+  suggestions: String
+  remarks: String
+  source: String
+}
+
+type SoftDeletedError implements Error {
+  message: String!
+}
+
+type TooManyAttemptsError implements Error {
+  message: String!
+}
+
+type UpdateRecipePayload {
+  recipe: Recipe @cost(weight: "10")
+  errors: [UpdateRecipeError!]
+}
+
+type User {
+  id: Long!
+  email: String! @authorize(policy: "ParentResultSelfOrAdmin")
+  passwordCreated: DateTime @authorize(policy: "ParentResultSelfOrAdmin")
+  isAdmin: Boolean! @authorize(policy: "ParentResultSelfOrAdmin")
+  name: String!
+  timeZone: String!
+  created: DateTime!
+  modified: DateTime!
+  revision: Int!
+}
+
+type ValidationError implements Error {
+  message: String!
+  path: [String!]!
+  code: ValidationErrorCode!
+}
+
+union AuthenticateError = IncorrectCredentialsError | TooManyAttemptsError
+
+union CreateCommentError = NotFoundError | ValidationError | SoftDeletedError
+
+union CreateRecipeError = ValidationError
+
+union UpdateRecipeError = ConcurrencyError | NotFoundError | ValidationError | SoftDeletedError
+
+input AuthenticateInput {
+  email: String!
+  password: String!
+}
+
+input BooleanOperationFilterInput {
+  eq: Boolean @cost(weight: "10")
+  neq: Boolean @cost(weight: "10")
+}
+
+input CommentAttributesInput {
+  body: String!
+}
+
+input CommentFilterInput {
+  and: [CommentFilterInput!]
+  or: [CommentFilterInput!]
+  id: LongOperationFilterInput
+  recipe: RecipeFilterInput
+  author: UserFilterInput
+  body: StringOperationFilterInput
+  created: DateTimeOperationFilterInput
+  modified: DateTimeOperationFilterInput
+  deleted: DateTimeOperationFilterInput
+  deletedByUser: UserFilterInput
+}
+
+input CommentSortInput {
+  id: SortEnumType @cost(weight: "10")
+  recipe: RecipeSortInput @cost(weight: "10")
+  author: UserSortInput @cost(weight: "10")
+  created: SortEnumType @cost(weight: "10")
+  modified: SortEnumType @cost(weight: "10")
+  deleted: SortEnumType @cost(weight: "10")
+  deletedByUser: UserSortInput @cost(weight: "10")
+}
+
+input CreateCommentInput {
+  recipeId: Long!
+  attributes: CommentAttributesInput!
+}
+
+input CreateRecipeInput {
+  attributes: RecipeAttributesInput!
+}
+
+input DateTimeOperationFilterInput {
+  eq: DateTime @cost(weight: "10")
+  neq: DateTime @cost(weight: "10")
+  in: [DateTime] @cost(weight: "10")
+  nin: [DateTime] @cost(weight: "10")
+  gt: DateTime @cost(weight: "10")
+  ngt: DateTime @cost(weight: "10")
+  gte: DateTime @cost(weight: "10")
+  ngte: DateTime @cost(weight: "10")
+  lt: DateTime @cost(weight: "10")
+  nlt: DateTime @cost(weight: "10")
+  lte: DateTime @cost(weight: "10")
+  nlte: DateTime @cost(weight: "10")
+}
+
+input DeleteCommentInput {
+  id: Long!
+}
+
+input DeleteRecipeInput {
+  id: Long!
+}
+
+input HardDeleteCommentInput {
+  id: Long!
+}
+
+input HardDeleteRecipeInput {
+  id: Long!
+}
+
+input IntOperationFilterInput {
+  eq: Int @cost(weight: "10")
+  neq: Int @cost(weight: "10")
+  in: [Int] @cost(weight: "10")
+  nin: [Int] @cost(weight: "10")
+  gt: Int @cost(weight: "10")
+  ngt: Int @cost(weight: "10")
+  gte: Int @cost(weight: "10")
+  ngte: Int @cost(weight: "10")
+  lt: Int @cost(weight: "10")
+  nlt: Int @cost(weight: "10")
+  lte: Int @cost(weight: "10")
+  nlte: Int @cost(weight: "10")
+}
+
+input ListFilterInputTypeOfCommentFilterInput {
+  all: CommentFilterInput @cost(weight: "10")
+  none: CommentFilterInput @cost(weight: "10")
+  some: CommentFilterInput @cost(weight: "10")
+  any: Boolean @cost(weight: "10")
+}
+
+input LongOperationFilterInput {
+  eq: Long @cost(weight: "10")
+  neq: Long @cost(weight: "10")
+  in: [Long] @cost(weight: "10")
+  nin: [Long] @cost(weight: "10")
+  gt: Long @cost(weight: "10")
+  ngt: Long @cost(weight: "10")
+  gte: Long @cost(weight: "10")
+  ngte: Long @cost(weight: "10")
+  lt: Long @cost(weight: "10")
+  nlt: Long @cost(weight: "10")
+  lte: Long @cost(weight: "10")
+  nlte: Long @cost(weight: "10")
+}
+
+input RecipeAttributesInput {
+  title: String!
+  preparationMinutes: Int
+  cookingMinutes: Int
+  servings: Int
+  ingredients: String!
+  method: String!
+  suggestions: String
+  remarks: String
+  source: String
+}
+
+input RecipeFilterInput {
+  and: [RecipeFilterInput!]
+  or: [RecipeFilterInput!]
+  id: LongOperationFilterInput
+  title: StringOperationFilterInput
+  preparationMinutes: IntOperationFilterInput
+  cookingMinutes: IntOperationFilterInput
+  servings: IntOperationFilterInput
+  ingredients: StringOperationFilterInput
+  method: StringOperationFilterInput
+  suggestions: StringOperationFilterInput
+  remarks: StringOperationFilterInput
+  source: StringOperationFilterInput
+  created: DateTimeOperationFilterInput
+  createdByUser: UserFilterInput
+  modified: DateTimeOperationFilterInput
+  modifiedByUser: UserFilterInput
+  deleted: DateTimeOperationFilterInput
+  deletedByUser: UserFilterInput
+  comments: ListFilterInputTypeOfCommentFilterInput
+}
+
+input RecipeSortInput {
+  id: SortEnumType @cost(weight: "10")
+  title: SortEnumType @cost(weight: "10")
+  preparationMinutes: SortEnumType @cost(weight: "10")
+  cookingMinutes: SortEnumType @cost(weight: "10")
+  servings: SortEnumType @cost(weight: "10")
+  ingredients: SortEnumType @cost(weight: "10")
+  method: SortEnumType @cost(weight: "10")
+  suggestions: SortEnumType @cost(weight: "10")
+  remarks: SortEnumType @cost(weight: "10")
+  source: SortEnumType @cost(weight: "10")
+  created: SortEnumType @cost(weight: "10")
+  createdByUser: UserSortInput @cost(weight: "10")
+  modified: SortEnumType @cost(weight: "10")
+  modifiedByUser: UserSortInput @cost(weight: "10")
+  deleted: SortEnumType @cost(weight: "10")
+  deletedByUser: UserSortInput @cost(weight: "10")
+}
+
+input StringOperationFilterInput {
+  and: [StringOperationFilterInput!]
+  or: [StringOperationFilterInput!]
+  eq: String @cost(weight: "10")
+  neq: String @cost(weight: "10")
+  contains: String @cost(weight: "20")
+  ncontains: String @cost(weight: "20")
+  in: [String] @cost(weight: "10")
+  nin: [String] @cost(weight: "10")
+  startsWith: String @cost(weight: "20")
+  nstartsWith: String @cost(weight: "20")
+  endsWith: String @cost(weight: "20")
+  nendsWith: String @cost(weight: "20")
+}
+
+input UpdateRecipeInput {
+  id: Long!
+  attributes: RecipeAttributesInput!
+  baseRevision: Int!
+}
+
+input UserFilterInput {
+  and: [UserFilterInput!]
+  or: [UserFilterInput!]
+  email: StringOperationFilterInput @adminOnly
+  passwordCreated: DateTimeOperationFilterInput @adminOnly
+  isAdmin: BooleanOperationFilterInput @adminOnly
+  id: LongOperationFilterInput
+  name: StringOperationFilterInput
+  timeZone: StringOperationFilterInput
+  created: DateTimeOperationFilterInput
+  modified: DateTimeOperationFilterInput
+}
+
+input UserSortInput {
+  email: SortEnumType @adminOnly @cost(weight: "10")
+  passwordCreated: SortEnumType @adminOnly @cost(weight: "10")
+  isAdmin: SortEnumType @adminOnly @cost(weight: "10")
+  id: SortEnumType @cost(weight: "10")
+  name: SortEnumType @cost(weight: "10")
+  timeZone: SortEnumType @cost(weight: "10")
+  created: SortEnumType @cost(weight: "10")
+  modified: SortEnumType @cost(weight: "10")
+}
+
+"Defines when a policy shall be executed."
+enum ApplyPolicy {
+  "Before the resolver was executed."
+  BEFORE_RESOLVER
+  "After the resolver was executed."
+  AFTER_RESOLVER
+  "The policy is applied in the validation step before the execution."
+  VALIDATION
+}
+
+enum SortEnumType {
+  ASC
+  DESC
+}
+
+enum ValidationErrorCode {
+  INVALID_STRING_LENGTH
+  OUT_OF_RANGE
+  REQUIRED
+}
+
+directive @adminOnly on INPUT_FIELD_DEFINITION
+
+"The authorize directive."
+directive @authorize("The name of the authorization policy that determines access to the annotated resource." policy: String "Roles that are allowed to access the annotated resource." roles: [String!] "Defines when when the authorize directive shall be applied.By default the authorize directives are applied during the validation phase." apply: ApplyPolicy! = BEFORE_RESOLVER) repeatable on OBJECT | FIELD_DEFINITION
+
+"The purpose of the `cost` directive is to define a `weight` for GraphQL types, fields, and arguments. Static analysis can use these weights when calculating the overall cost of a query or response."
+directive @cost("The `weight` argument defines what value to add to the overall cost for every appearance, or possible appearance, of a type, field, argument, etc." weight: String!) on SCALAR | OBJECT | FIELD_DEFINITION | ARGUMENT_DEFINITION | ENUM | INPUT_FIELD_DEFINITION
+
+"The purpose of the `@listSize` directive is to either inform the static analysis about the size of returned lists (if that information is statically available), or to point the analysis to where to find that information."
+directive @listSize("The `assumedSize` argument can be used to statically define the maximum length of a list returned by a field." assumedSize: Int "The `slicingArguments` argument can be used to define which of the field's arguments with numeric type are slicing arguments, so that their value determines the size of the list returned by that field. It may specify a list of multiple slicing arguments." slicingArguments: [String!] "The `slicingArgumentDefaultValue` argument can be used to define a default value for a slicing argument, which is used if the argument is not present in a query." slicingArgumentDefaultValue: Int "The `sizedFields` argument can be used to define that the value of the `assumedSize` argument or of a slicing argument does not affect the size of a list returned by a field itself, but that of a list returned by one of its sub-fields." sizedFields: [String!] "The `requireOneSlicingArgument` argument can be used to inform the static analysis that it should expect that exactly one of the defined slicing arguments is present in a query. If that is not the case (i.e., if none or multiple slicing arguments are present), the static analysis may throw an error." requireOneSlicingArgument: Boolean! = true) on FIELD_DEFINITION
+
+"The `@specifiedBy` directive is used within the type system definition language to provide a URL for specifying the behavior of custom scalar definitions."
+directive @specifiedBy("The specifiedBy URL points to a human-readable specification. This field will only read a result for scalar types." url: String!) on SCALAR
+
+"The `DateTime` scalar represents an ISO-8601 compliant date time type."
+scalar DateTime @specifiedBy(url: "https:\/\/www.graphql-scalars.com\/date-time")
+
+"The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1."
+scalar Long
