@@ -15,7 +15,17 @@
 
         npm install
 
-3.  Start the development server:
+3.  Ensure that the backend API server is [running
+    locally](https://github.com/smfeest/buttercup/blob/main/README.md#running-the-app):
+
+        dotnet run --project ../buttercup/src/Buttercup.Web
+
+    Or override the `GRAPHQL_ENDPOINT` environment variable locally to specify the URL of the
+    desired remote GraphQL endpoint:
+
+        echo "GRAPHQL_ENDPOINT=https://dev.buttercup.doubliez.net/graphql" >> .env.local
+
+4.  Start the development server:
 
         npm run dev
 
