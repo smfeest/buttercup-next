@@ -14,10 +14,10 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-    "\n      mutation SignIn($input: AuthenticateInput!) {\n        authenticate(input: $input) {\n          isSuccess\n          errors {\n            ... on Error {\n              message\n            }\n          }\n        }\n      }\n    ": typeof types.SignInDocument,
+    "\n      mutation SignIn($input: AuthenticateInput!) {\n        authenticate(input: $input) {\n          isSuccess\n          accessToken\n          user {\n            id\n            name\n            email\n            isAdmin\n            timeZone\n          }\n          errors {\n            ... on Error {\n              message\n            }\n          }\n        }\n      }\n    ": typeof types.SignInDocument,
 };
 const documents: Documents = {
-    "\n      mutation SignIn($input: AuthenticateInput!) {\n        authenticate(input: $input) {\n          isSuccess\n          errors {\n            ... on Error {\n              message\n            }\n          }\n        }\n      }\n    ": types.SignInDocument,
+    "\n      mutation SignIn($input: AuthenticateInput!) {\n        authenticate(input: $input) {\n          isSuccess\n          accessToken\n          user {\n            id\n            name\n            email\n            isAdmin\n            timeZone\n          }\n          errors {\n            ... on Error {\n              message\n            }\n          }\n        }\n      }\n    ": types.SignInDocument,
 };
 
 /**
@@ -37,7 +37,7 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n      mutation SignIn($input: AuthenticateInput!) {\n        authenticate(input: $input) {\n          isSuccess\n          errors {\n            ... on Error {\n              message\n            }\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation SignIn($input: AuthenticateInput!) {\n        authenticate(input: $input) {\n          isSuccess\n          errors {\n            ... on Error {\n              message\n            }\n          }\n        }\n      }\n    "];
+export function graphql(source: "\n      mutation SignIn($input: AuthenticateInput!) {\n        authenticate(input: $input) {\n          isSuccess\n          accessToken\n          user {\n            id\n            name\n            email\n            isAdmin\n            timeZone\n          }\n          errors {\n            ... on Error {\n              message\n            }\n          }\n        }\n      }\n    "): (typeof documents)["\n      mutation SignIn($input: AuthenticateInput!) {\n        authenticate(input: $input) {\n          isSuccess\n          accessToken\n          user {\n            id\n            name\n            email\n            isAdmin\n            timeZone\n          }\n          errors {\n            ... on Error {\n              message\n            }\n          }\n        }\n      }\n    "];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
