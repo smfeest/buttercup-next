@@ -2,6 +2,7 @@
 
 import { getClient } from "@/api/client";
 import { graphql } from "@/api/graphql";
+import { setSession } from "@/session";
 import { redirect } from "next/navigation";
 
 type SignInState = {
@@ -23,6 +24,14 @@ export default async function signInAction(
       mutation SignIn($input: AuthenticateInput!) {
         authenticate(input: $input) {
           isSuccess
+          accessToken
+          user {
+            id
+            name
+            email
+            isAdmin
+            timeZone
+          }
           errors {
             ... on Error {
               message
@@ -47,6 +56,11 @@ export default async function signInAction(
       ),
     };
   }
+
+  await setSession({
+    user: data.authenticate.user!,
+    accessToken: data.authenticate.accessToken!,
+  });
 
   redirect("/");
 }
