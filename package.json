@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "graphql-codegen": "graphql-codegen --config graphql-codegen.config.ts -r dotenv/config"
+    "graphql-codegen": "graphql-codegen --config graphql-codegen.config.ts -r dotenv/config",
+    "test": "jest"
   },
   "dependencies": {
     "@apollo/client": "^3.13.9",
@@ -24,14 +25,21 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@graphql-codegen/cli": "^5.0.7",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
     "@tsconfig/recommended": "^1.0.10",
+    "@types/jest": "^30.0.0",
     "@types/negotiator": "^0.6.4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.4.1",
+    "jest": "^30.0.5",
+    "jest-environment-jsdom": "^30.0.5",
     "prettier": "^3.6.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }
