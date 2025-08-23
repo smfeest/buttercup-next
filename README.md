@@ -29,6 +29,18 @@
 
         npm run dev
 
+## Running tests
+
+### Unit tests
+
+- To run all unit tests once:
+
+        npx jest
+
+- To run tests for changed files in watch mode:
+
+        npx jest --watch
+
 ## Linting
 
 - To lint the TypeScript code:
