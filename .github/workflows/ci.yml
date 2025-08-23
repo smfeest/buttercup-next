@@ -20,3 +20,5 @@ jobs:
         run: npx prettier -c .
       - name: Build app
         run: npx next build
+      - name: Run unit tests
+        run: npm test
