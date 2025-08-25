@@ -14,6 +14,9 @@ export default defineConfig({
     timezoneId: "Europe/London",
     trace: "on-first-retry",
   },
+  expect: {
+    timeout: 1000,
+  },
   projects: [
     {
       name: "chromium",
