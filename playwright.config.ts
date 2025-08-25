@@ -11,6 +11,8 @@ export default defineConfig({
   reporter: "html",
   use: {
     baseURL,
+    locale: "en-GB",
+    timezoneId: "Europe/London",
     trace: "on-first-retry",
   },
   projects: [
