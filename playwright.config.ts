@@ -1,5 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const baseURL = `http://localhost:${process.env.PORT || 3000}`;
+
 export default defineConfig({
   testDir: "./tests",
   fullyParallel: true,
@@ -8,6 +10,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : "50%",
   reporter: "html",
   use: {
+    baseURL,
     trace: "on-first-retry",
   },
   projects: [
