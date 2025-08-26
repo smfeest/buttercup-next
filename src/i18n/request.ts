@@ -7,7 +7,7 @@ export default getRequestConfig(async () => {
   const requestHeaders = await headers();
   const languages = new Negotiator({
     headers: {
-      "accept-language": requestHeaders.get("accept-language") ?? undefined,
+      "accept-language": requestHeaders.get("accept-language") ?? "",
     },
   }).languages();
   const locale = match(languages, ["en", "fr"], "en");

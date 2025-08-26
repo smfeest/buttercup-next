@@ -19,6 +19,16 @@
 
         npm run dev
 
+## Running the end-to-end tests
+
+- To run all tests once:
+
+        npx playwright test
+
+- To run the tests in UI mode:
+
+        npx playwright test --ui
+
 ## Linting
 
 - To lint the TypeScript code:
