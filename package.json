@@ -22,7 +22,7 @@
     "@playwright/test": "^1.55.0",
     "@tsconfig/recommended": "^1.0.10",
     "@types/negotiator": "^0.6.4",
-    "@types/node": "^20",
+    "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
