@@ -39,6 +39,21 @@
 
         npx playwright test --ui
 
+### Notes
+
+- Before running any tests, Playwright will automatically start a specially configured instance of
+  the backend API server on http://localhost:5005. However, to save time when repeatedly re-running
+  Playwright tests outside of UI mode, it is also possible to start the backend API server manually
+  first:
+
+        dotnet run --project ../buttercup/src/Buttercup.Web --environment E2E --urls http://localhost:5005
+
+- End-to-end tests should be designed to clean up any database records they create, even on failure.
+  However, if necessary, the database can be deleted, ready to be recreated on the next run:
+
+        cd ../buttercup/src/Buttercup.Web
+        DOTNET_ENVIRONMENT=E2E dotnet ef database drop
+
 ## Linting
 
 - To lint the TypeScript code:
