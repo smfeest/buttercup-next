@@ -2,7 +2,7 @@
 
 ## Required software
 
-- [Node.js 22](https://nodejs.org) (installation through [Node Version
+- [Node.js 24](https://nodejs.org) (installation through [Node Version
   Manager](https://github.com/nvm-sh/nvm) is recommended and assumed in instructions below)
 
 ## Running the app in development
