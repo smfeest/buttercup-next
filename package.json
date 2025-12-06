@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@playwright/test": "^1.55.0",
+    "@playwright/test": "^1.57.0",
     "@tsconfig/recommended": "^1.0.10",
     "@types/negotiator": "^0.6.4",
     "@types/node": "^22",
