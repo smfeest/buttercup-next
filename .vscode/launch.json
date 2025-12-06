@@ -29,7 +29,7 @@
     {
       "name": "Next.js: debug full stack",
       "type": "node",
-      "runtimeVersion": "22",
+      "runtimeVersion": "24",
       "request": "launch",
       "program": "${workspaceFolder}/node_modules/next/dist/bin/next",
       "runtimeArgs": ["--inspect"],
