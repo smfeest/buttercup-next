@@ -6,6 +6,17 @@ jobs:
   build:
     name: Build and test
     runs-on: ubuntu-24.04
+    services:
+      mailpit:
+        image: axllent/mailpit
+        ports:
+          - 8025:8025
+      mariadb:
+        image: mariadb:lts
+        env:
+          MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
+      redis:
+        image: redis
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -22,5 +33,18 @@ jobs:
         run: npx next build
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
+      - name: Start API server
+        run: |
+          docker run --name api-server \
+            -d \
+            -p 5000:8080 \
+            -e CreateDatabaseOnStartup=true \
+            -e EnableTelemetry=false \
+            -e Email__Provider="mailpit" \
+            -e Email__MailpitServer="mailpit:8025" \
+            -e ConnectionStrings__AppDb="Server=mariadb;Uid=root;Database=buttercup_app;" \
+            -e Redis__ConnectionString="redis,abortConnect=false,name=buttercup-app" \
+            --rm \
+            ghcr.io/smfeest/buttercup:latest
       - name: Run end-to-end tests
         run: npx playwright test
