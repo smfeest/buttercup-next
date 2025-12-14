@@ -17,6 +17,17 @@ jobs:
           MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
       redis:
         image: redis
+      buttercup_api:
+        image: ghcr.io/smfeest/buttercup:latest
+        env:
+          CreateDatabaseOnStartup: true
+          EnableTelemetry: false
+          Email__Provider: mailpit
+          Email__MailpitServer: mailpit:8025
+          ConnectionStrings__AppDb: Server=mariadb;Uid=root;Database=buttercup_app;
+          Redis__ConnectionString: redis,abortConnect=false,name=buttercup-app
+        ports:
+          - 5000:8080
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -33,18 +44,5 @@ jobs:
         run: npx next build
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
-      - name: Start API server
-        run: |
-          docker run --name api-server \
-            -d \
-            -p 5000:8080 \
-            -e CreateDatabaseOnStartup=true \
-            -e EnableTelemetry=false \
-            -e Email__Provider="mailpit" \
-            -e Email__MailpitServer="mailpit:8025" \
-            -e ConnectionStrings__AppDb="Server=mariadb;Uid=root;Database=buttercup_app;" \
-            -e Redis__ConnectionString="redis,abortConnect=false,name=buttercup-app" \
-            --rm \
-            ghcr.io/smfeest/buttercup:latest
       - name: Run end-to-end tests
         run: npx playwright test
